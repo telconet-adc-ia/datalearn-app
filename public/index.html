@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataLearn — Videotutoriales</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f4f0;--s:#fff;--s2:#f0efe9;--s3:#e8e7e0;--b:#e2e0d8;--b2:#cccab8;--t:#1a1916;--t2:#6b6860;--t3:#a8a69e;--ac:#2563eb;--acb:#eff4ff;--act:#1d4ed8;--gr:#16a34a;--grb:#f0fdf4;--fn:'Outfit',sans-serif;--r:8px;--rl:14px;--rx:20px}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:var(--fn);background:var(--bg);color:var(--t);font-size:15px}
+body{display:flex;flex-direction:column}
+
+/* NAV */
+nav{background:var(--s);border-bottom:1px solid var(--b);height:54px;display:flex;align-items:center;padding:0 24px;gap:16px;flex-shrink:0;position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:700;letter-spacing:-.3px;text-decoration:none;color:var(--t)}
+.logo-m{width:28px;height:28px;background:var(--ac);border-radius:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px}
+.nav-mid{flex:1;display:flex;gap:4px}
+.nt{padding:5px 12px;border-radius:var(--r);font-size:13px;font-weight:500;color:var(--t2);cursor:pointer;border:none;background:none;transition:all .15s;font-family:var(--fn)}
+.nt:hover{background:var(--s2);color:var(--t)}
+.nt.active{background:var(--acb);color:var(--act)}
+.key-btn{display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:var(--r);font-size:12px;font-weight:500;border:1px solid var(--b);background:var(--s2);color:var(--t2);cursor:pointer;transition:all .15s;font-family:var(--fn)}
+.key-btn:hover{border-color:var(--b2)}
+.key-btn.ok{background:var(--grb);color:var(--gr);border-color:#bbf7d0}
+.kd{width:6px;height:6px;border-radius:50%;background:currentColor}
+
+/* LAYOUT */
+.layout{display:flex;flex:1;overflow:hidden;height:calc(100vh - 54px)}
+
+/* SIDEBAR */
+.sb{width:250px;flex-shrink:0;background:var(--s);border-right:1px solid var(--b);display:flex;flex-direction:column;overflow:hidden}
+.sb-body{flex:1;overflow-y:auto;padding:6px 8px}
+.sb-body::-webkit-scrollbar{width:3px}
+.sb-body::-webkit-scrollbar-thumb{background:var(--b2);border-radius:3px}
+.sb-sec{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;color:var(--t3);padding:10px 7px 4px}
+.mg{margin-bottom:2px}
+.mg-h{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:var(--r);cursor:pointer;font-size:13px;font-weight:500;color:var(--t2);transition:all .15s;user-select:none}
+.mg-h:hover{background:var(--s2);color:var(--t)}
+.mg-h.op{color:var(--t)}
+.mc{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.mn{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk{font-size:10px;background:var(--s2);color:var(--t3);padding:1px 6px;border-radius:20px}
+.mch{font-size:11px;color:var(--t3);transition:transform .2s;flex-shrink:0}
+.mg.op .mch{transform:rotate(90deg)}
+.sl{display:none;padding:2px 0 4px 22px}
+.mg.op .sl{display:block}
+.sr{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:var(--r);font-size:12.5px;color:var(--t2);cursor:pointer;transition:all .15s;margin-bottom:1px}
+.sr:hover{background:var(--s2);color:var(--t)}
+.sr.active{background:var(--acb);color:var(--act);font-weight:500}
+.sr-add{font-size:12px;color:var(--t3);font-style:italic}
+.sr-add:hover{color:var(--t2);background:var(--s2)}
+.sb-ft{padding:10px;border-top:1px solid var(--b)}
+.btn-nm{width:100%;padding:8px;border:1.5px dashed var(--b2);border-radius:var(--r);background:none;font-family:var(--fn);font-size:12.5px;font-weight:500;color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s}
+.btn-nm:hover{border-color:var(--ac);color:var(--ac);background:var(--acb)}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.main::-webkit-scrollbar{width:5px}
+.main::-webkit-scrollbar-thumb{background:var(--b2);border-radius:5px}
+.tb{background:var(--s);border-bottom:1px solid var(--b);padding:10px 24px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:10}
+.tb-i{flex:1;min-width:0}
+.tb-t{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-s{font-size:11.5px;color:var(--t2);margin-top:1px}
+.sw{display:flex;align-items:center;gap:6px;background:var(--s2);border:1px solid var(--b);border-radius:var(--r);padding:6px 10px}
+.sw:focus-within{border-color:var(--ac)}
+.sw input{background:none;border:none;outline:none;font-size:12.5px;font-family:var(--fn);color:var(--t);width:150px}
+.sw input::placeholder{color:var(--t3)}
+.lgs{display:flex;border:1px solid var(--b);border-radius:var(--r);overflow:hidden}
+.lb{padding:6px 12px;font-size:12px;font-weight:500;border:none;background:none;font-family:var(--fn);color:var(--t2);cursor:pointer;transition:all .15s}
+.lb.active{background:var(--ac);color:#fff}
+.page{padding:24px;flex:1}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+@media(max-width:640px){.stats{grid-template-columns:repeat(2,1fr)}}
+.sc{background:var(--s);border:1px solid var(--b);border-radius:var(--rl);padding:14px 16px}
+.sl2{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--t3)}
+.sv{font-size:24px;font-weight:700;color:var(--t);margin-top:3px}
+.ss{font-size:11.5px;color:var(--t2);margin-top:2px}
+
+/* TOPICS */
+.tops{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+.tp{font-size:12px;font-weight:500;padding:4px 12px;border-radius:20px;border:1px solid var(--b);background:var(--s);color:var(--t2);cursor:pointer;transition:all .15s}
+.tp:hover{border-color:var(--b2);color:var(--t)}
+.tp.active{background:var(--ac);border-color:var(--ac);color:#fff}
+
+/* SEC HEAD */
+.sh{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.sh h3{font-size:13px;font-weight:600;color:var(--t2);white-space:nowrap}
+.shl{flex:1;height:1px;background:var(--b)}
+.shc{font-size:12px;color:var(--t3)}
+
+/* VIDEOS */
+.vg{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+@media(max-width:500px){.vg{grid-template-columns:1fr}}
+.vc{background:var(--s);border:1px solid var(--b);border-radius:var(--rl);overflow:hidden;cursor:pointer;transition:all .2s;text-decoration:none;display:block}
+.vc:hover{border-color:var(--b2);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.07)}
+.vt{aspect-ratio:16/9;background:var(--s2);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:34px}
+.vt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.vov{position:absolute;inset:0;background:rgba(0,0,0,0);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.vc:hover .vov{background:rgba(0,0,0,.35)}
+.vpb{width:40px;height:40px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.7);transition:all .2s}
+.vc:hover .vpb{opacity:1;transform:scale(1)}
+.vpb svg{width:14px;height:14px;fill:var(--ac);margin-left:2px}
+.vb{padding:12px 13px}
+.vti{font-size:13px;font-weight:500;color:var(--t);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.vm{margin-top:7px;display:flex;gap:5px;flex-wrap:wrap}
+.pi{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px}
+.pi-es{background:#fce7f3;color:#9d174d}
+.pi-en{background:#dcfce7;color:#166534}
+.pi-lv{background:var(--s2);color:var(--t2)}
+.vch{font-size:11px;color:var(--t3);margin-top:4px}
+
+/* EMPTY */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:380px;gap:14px;text-align:center;padding:40px}
+.empty-ic{width:60px;height:60px;border-radius:var(--rx);background:var(--s2);border:1px solid var(--b);display:flex;align-items:center;justify-content:center;font-size:26px}
+.empty h2{font-size:17px;font-weight:600}
+.empty p{font-size:13.5px;color:var(--t2);max-width:320px;line-height:1.6}
+
+/* UPLOAD */
+.uz{border:2px dashed var(--b2);border-radius:var(--rx);padding:52px 40px;text-align:center;cursor:pointer;transition:all .2s;background:var(--s);display:flex;flex-direction:column;align-items:center;gap:12px}
+.uz:hover,.uz.drag{border-color:var(--ac);background:var(--acb)}
+.uz-ic{width:52px;height:52px;border-radius:var(--rl);background:var(--s2);border:1px solid var(--b);display:flex;align-items:center;justify-content:center;font-size:24px}
+.uz h3{font-size:16px;font-weight:600}
+.uz p{font-size:13px;color:var(--t2)}
+.uz small{font-size:11.5px;color:var(--t3)}
+
+/* PROC */
+.proc{background:var(--s);border:1px solid var(--b);border-radius:var(--rx);padding:48px;text-align:center}
+.spin{width:34px;height:34px;border:3px solid var(--b);border-top-color:var(--ac);border-radius:50%;animation:sp .75s linear infinite;margin:0 auto 18px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.proc h3{font-size:16px;font-weight:600;margin-bottom:6px}
+.proc p{font-size:13px;color:var(--t2)}
+.pst{display:flex;flex-direction:column;gap:7px;margin:20px auto 0;max-width:280px}
+.ps{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--t3)}
+.ps.done{color:var(--gr)}
+.ps.cur{color:var(--t);font-weight:500}
+.ps-d{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:var(--r);padding:9px 18px;font-family:var(--fn);font-size:13.5px;font-weight:500;cursor:pointer;transition:opacity .15s;border:none}
+.btn-p{background:var(--ac);color:#fff}
+.btn-p:hover{opacity:.88}
+.btn-s{background:var(--s2);color:var(--t);border:1px solid var(--b)}
+.btn-s:hover{border-color:var(--b2)}
+.btn-ic{width:30px;height:30px;border-radius:var(--r);border:1px solid var(--b);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--t2);font-size:15px;transition:all .15s}
+.btn-ic:hover{background:var(--s2);color:var(--t)}
+
+/* SEMHERO */
+.semh{background:var(--s);border:1px solid var(--b);border-radius:var(--rl);padding:16px 20px;margin-bottom:18px;display:flex;align-items:center;gap:14px}
+.semhbar{width:4px;border-radius:4px;align-self:stretch;flex-shrink:0}
+.semhi{flex:1;min-width:0}
+.semhti{font-size:15px;font-weight:600}
+.semhsu{font-size:12px;color:var(--t2);margin-top:3px}
+.semha{display:flex;gap:8px}
+
+/* ALERT */
+.alert{padding:10px 14px;border-radius:var(--r);font-size:13px;margin-bottom:14px;background:#fef2f2;color:#b91c1c;border:1px solid #fecaca}
+
+/* MODAL */
+.mback{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px}
+.mod{background:var(--s);border:1px solid var(--b);border-radius:var(--rx);padding:28px;width:420px;max-width:100%}
+.mod h2{font-size:17px;font-weight:700;margin-bottom:4px}
+.mod-su{font-size:13px;color:var(--t2);margin-bottom:22px}
+.ml{display:block;font-size:12.5px;font-weight:500;color:var(--t2);margin-bottom:5px;margin-top:14px}
+.mi{width:100%;padding:9px 12px;border:1px solid var(--b);border-radius:var(--r);background:var(--s2);font-family:var(--fn);font-size:13.5px;color:var(--t);outline:none;transition:border-color .15s}
+.mi:focus{border-color:var(--ac);background:var(--s)}
+.mbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:22px}
+.cp{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.co{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:transform .15s;flex-shrink:0}
+.co:hover{transform:scale(1.15)}
+.co.sel{border-color:var(--t)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .sb{display:none}
+  .layout{display:block}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .tb{flex-wrap:wrap;gap:8px;padding:10px 16px}
+  .page{padding:16px}
+}
+
+/* ANIM */
+@keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.fu{animation:fu .25s ease both}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="#"><div class="logo-m">🎓</div>DataLearn</a>
+  <div class="nav-mid">
+    <button class="nt active" onclick="setTab('videos',this)">Videotutoriales</button>
+    <button class="nt" onclick="setTab('materias',this)">Mis materias</button>
+  </div>
+  <button class="key-btn" id="kbtn" onclick="showKeyModal()">
+    <span class="kd"></span><span id="klbl">Config. YouTube API</span>
+  </button>
+</nav>
+
+<div class="layout">
+  <aside class="sb">
+    <div class="sb-body">
+      <div class="sb-sec">Materias</div>
+      <div id="mlist"></div>
+    </div>
+    <div class="sb-ft">
+      <button class="btn-nm" onclick="showMM()">＋ Nueva materia</button>
+    </div>
+  </aside>
+  <div class="main">
+    <div class="tb">
+      <div class="tb-i">
+        <div class="tb-t" id="tbt">Ingeniería en Ciencia de Datos</div>
+        <div class="tb-s" id="tbs">Selecciona una semana o crea una materia</div>
+      </div>
+      <div class="sw"><span style="color:var(--t3);font-size:14px">🔍</span><input type="text" id="vs" placeholder="Buscar video..." disabled oninput="ST.s=this.value.toLowerCase();rV()"></div>
+      <div class="lgs">
+        <button class="lb active" data-l="all" onclick="sL(this)">Todos</button>
+        <button class="lb" data-l="es" onclick="sL(this)">ES</button>
+        <button class="lb" data-l="en" onclick="sL(this)">EN</button>
+      </div>
+    </div>
+    <div class="page" id="mc"></div>
+  </div>
+</div>
+
+<div id="mods"></div>
+<input type="file" id="pfi" accept=".pdf" style="display:none">
+
+<script>
+const PAL=['#2563eb','#16a34a','#dc2626','#db2777','#ea580c','#7c3aed','#ca8a04'];
+let DB={m:{},s:{},yk:''};
+let ST={sem:null,mat:null,lang:'all',s:'',tp:null,open:[]};
+let NMC=PAL[0];
+
+function lDB(){const d=localStorage.getItem('dl4');if(d)try{DB=JSON.parse(d);}catch(e){}if(DB.yk){document.getElementById('kbtn').classList.add('ok');document.getElementById('klbl').textContent='YouTube API activa';}rSB();rM();}
+function sDB(){localStorage.setItem('dl4',JSON.stringify(DB));}
+
+function showKeyModal(){
+  document.getElementById('mods').innerHTML=`<div class="mback" onclick="if(event.target===this)cM()"><div class="mod">
+    <h2>YouTube API Key</h2>
+    <p class="mod-su">Activa links directos a videos reales. Gratuita en Google Cloud Console.</p>
+    <label class="ml">API Key</label>
+    <input class="mi" id="ki" type="password" placeholder="AIzaSy..." value="${DB.yk||''}">
+    <div style="margin-top:14px;background:var(--s2);border:1px solid var(--b);border-radius:var(--r);padding:12px;font-size:12px;color:var(--t2);line-height:1.7">
+      <strong style="color:var(--t)">Cómo obtenerla (5 min, gratis):</strong><br>
+      1. Ir a <strong>console.cloud.google.com</strong><br>
+      2. Nuevo proyecto → Biblioteca → YouTube Data API v3 → Habilitar<br>
+      3. Credenciales → Crear clave de API → Restringir a YouTube Data API v3
+    </div>
+    <div class="mbtns">
+      ${DB.yk?`<button class="btn btn-s" onclick="DB.yk='';sDB();cM();document.getElementById('kbtn').classList.remove('ok');document.getElementById('klbl').textContent='Config. YouTube API'">Eliminar key</button>`:''}
+      <button class="btn btn-s" onclick="cM()">Cancelar</button>
+      <button class="btn btn-p" onclick="svK()">Guardar</button>
+    </div>
+  </div></div>`;
+}
+function svK(){DB.yk=document.getElementById('ki').value.trim();sDB();const ok=!!DB.yk;document.getElementById('kbtn').classList.toggle('ok',ok);document.getElementById('klbl').textContent=ok?'YouTube API activa':'Config. YouTube API';cM();}
+
+function rSB(){
+  const mats=Object.values(DB.m).sort((a,b)=>a.n.localeCompare(b.n));
+  const el=document.getElementById('mlist');
+  if(!mats.length){el.innerHTML='<div style="padding:8px 14px;font-size:12px;color:var(--t3)">Sin materias aún</div>';return;}
+  el.innerHTML=mats.map(m=>{
+    const sems=Object.values(DB.s).filter(s=>s.mi===m.id).sort((a,b)=>a.n-b.n);
+    const op=ST.open.includes(m.id)||sems.some(s=>s.id===ST.sem);
+    return`<div class="mg${op?' op':''}" id="mg${m.id}">
+      <div class="mg-h${op?' op':''}" onclick="tM('${m.id}')">
+        <span class="mc" style="background:${m.c}"></span>
+        <span class="mn">${m.n}</span><span class="mk">${sems.length}</span>
+        <span class="mch">▶</span>
+      </div>
+      <div class="sl">
+        ${sems.map(s=>`<div class="sr${s.id===ST.sem?' active':''}" onclick="selS('${s.id}')">${s.t}</div>`).join('')}
+        <div class="sr sr-add" onclick="showUP('${m.id}')">+ Agregar semana</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function tM(id){const i=ST.open.indexOf(id);if(i>=0)ST.open.splice(i,1);else ST.open.push(id);rSB();}
+function selS(id){ST.sem=id;ST.tp=null;ST.s='';document.getElementById('vs').value='';document.getElementById('vs').disabled=false;rSB();rM();}
+
+function setTab(tab,btn){document.querySelectorAll('.nt').forEach(b=>b.classList.remove('active'));btn.classList.add('active');if(tab==='materias')rMgr();else rM();}
+
+function rM(){
+  const mc=document.getElementById('mc');
+  if(!ST.sem){
+    const has=Object.keys(DB.m).length>0;
+    document.getElementById('tbt').textContent='Ingeniería en Ciencia de Datos';
+    document.getElementById('tbs').textContent=has?'Selecciona una semana':'Bienvenido a DataLearn';
+    mc.innerHTML=`<div class="empty fu"><div class="empty-ic">${has?'📚':'🎓'}</div><h2>${has?'Selecciona una semana':'Comienza tu carrera'}</h2><p>${has?'Elige una semana del panel izquierdo para ver sus videos':'Crea tu primera materia y sube el PDF semanal'}</p>${!has?`<button class="btn btn-p" onclick="showMM()">＋ Crear primera materia</button>`:''}</div>`;
+    return;
+  }
+  const sem=DB.s[ST.sem];const mat=DB.m[sem.mi];
+  document.getElementById('tbt').textContent=sem.t;
+  document.getElementById('tbs').textContent=mat.n+(sem.f?' · '+sem.f:'');
+  let vids=sem.v||[];
+  if(ST.tp)vids=vids.filter(v=>v.ti===ST.tp);
+  if(ST.lang!=='all')vids=vids.filter(v=>v.id===ST.lang);
+  if(ST.s)vids=vids.filter(v=>(v.tt+v.ch).toLowerCase().includes(ST.s));
+  const all=sem.v||[];
+  mc.innerHTML=`<div class="fu">
+    <div class="semh">
+      <div class="semhbar" style="background:${mat.c}"></div>
+      <div class="semhi"><div class="semhti">${sem.t}</div><div class="semhsu">${mat.n}${sem.d?' · '+sem.d:''}</div></div>
+      <div class="semha">
+        <button class="btn btn-s" style="font-size:12px;padding:6px 12px" onclick="showUP('${mat.id}')">＋ Nueva semana</button>
+        <button class="btn-ic" onclick="delS('${sem.id}')" title="Eliminar semana">🗑</button>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="sc"><div class="sl2">Temas</div><div class="sv">${sem.temas?.length||0}</div><div class="ss">identificados</div></div>
+      <div class="sc"><div class="sl2">Videos</div><div class="sv">${all.length}</div><div class="ss">recomendados</div></div>
+      <div class="sc"><div class="sl2">Español</div><div class="sv">${all.filter(v=>v.id==='es').length}</div><div class="ss">videos</div></div>
+      <div class="sc"><div class="sl2">Inglés</div><div class="sv">${all.filter(v=>v.id==='en').length}</div><div class="ss">videos</div></div>
+    </div>
+    ${sem.temas?.length?`<div class="tops"><div class="tp${!ST.tp?' active':''}" onclick="sT(null)">Todos</div>${sem.temas.map(t=>`<div class="tp${ST.tp===t.id?' active':''}" onclick="sT('${t.id}')">${t.e||''} ${t.n}</div>`).join('')}</div>`:''}
+    <div class="sh"><h3>Videos recomendados</h3><div class="shl"></div><span class="shc">${vids.length} video${vids.length!==1?'s':''}</span></div>
+    ${vids.length?`<div class="vg">${vids.map((v,i)=>`
+      <a class="vc fu" style="animation-delay:${i*.03}s" href="${v.u}" target="_blank" rel="noopener">
+        <div class="vt">${v.th?`<img src="${v.th}" alt="" onerror="this.style.display='none'">`:''}<span style="position:relative;z-index:1">${v.em||'🎬'}</span><div class="vov"><div class="vpb"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
+        <div class="vb">
+          <div class="vti">${v.tt}</div>
+          <div class="vm"><span class="pi ${v.id==='es'?'pi-es':'pi-en'}">${v.id==='es'?'🇪🇸 ES':'🇬🇧 EN'}</span><span class="pi pi-lv">${v.lv||''}</span></div>
+          <div class="vch">${v.ch||''} · ${v.du||''}</div>
+        </div>
+      </a>`).join('')}</div>`
+    :`<div class="empty" style="min-height:160px"><div class="empty-ic">🎬</div><p>Sin videos para estos filtros</p></div>`}
+  </div>`;
+}
+
+function sT(id){ST.tp=id;rM();}
+function sL(b){document.querySelectorAll('.lb').forEach(x=>x.classList.remove('active'));b.classList.add('active');ST.lang=b.dataset.l;rV();}
+function rV(){if(ST.sem)rM();}
+function delS(id){if(!confirm('¿Eliminar esta semana y sus videos?'))return;delete DB.s[id];ST.sem=null;sDB();rSB();rM();}
+
+function showUP(mid){
+  ST.sem=null;ST.mat=mid;
+  document.getElementById('vs').disabled=true;
+  const mat=DB.m[mid];
+  document.getElementById('tbt').textContent=mat.n;
+  document.getElementById('tbs').textContent='Nueva semana — sube el PDF';
+  const mc=document.getElementById('mc');
+  mc.innerHTML=`<div id="az"></div><div class="uz fu" id="uz" onclick="document.getElementById('pfi').click()">
+    <div class="uz-ic">📂</div>
+    <h3>Arrastra el PDF aquí</h3>
+    <p>O haz clic para seleccionar el archivo</p>
+    <small>Material semanal · ${mat.n}</small>
+    <button class="btn btn-p" onclick="event.stopPropagation();document.getElementById('pfi').click()">↑ Seleccionar PDF</button>
+  </div>`;
+  const uz=document.getElementById('uz');
+  uz.addEventListener('dragover',e=>{e.preventDefault();uz.classList.add('drag');});
+  uz.addEventListener('dragleave',()=>uz.classList.remove('drag'));
+  uz.addEventListener('drop',e=>{e.preventDefault();uz.classList.remove('drag');const f=e.dataTransfer.files[0];if(f&&f.type==='application/pdf')procPDF(f,mid);else showAZ('Solo archivos PDF.');});
+  document.getElementById('pfi').onchange=e=>{if(e.target.files[0])procPDF(e.target.files[0],mid);e.target.value='';};
+}
+
+function showAZ(msg){const z=document.getElementById('az');if(z){z.innerHTML=`<div class="alert">${msg}</div>`;setTimeout(()=>{if(z)z.innerHTML='';},3500);}}
+
+async function procPDF(file,mid){
+  const mat=DB.m[mid];
+  document.getElementById('mc').innerHTML=`<div class="proc fu">
+    <div class="spin"></div><h3>Analizando el material</h3><p>${file.name}</p>
+    <div class="pst">
+      <div class="ps done" id="ps1"><span class="ps-d"></span>Archivo recibido</div>
+      <div class="ps cur" id="ps2"><span class="ps-d"></span>Extrayendo temas con IA...</div>
+      <div class="ps" id="ps3"><span class="ps-d"></span>Generando recomendaciones</div>
+      <div class="ps" id="ps4"><span class="ps-d"></span>${DB.yk?'Buscando en YouTube':'Preparando links de búsqueda'}</div>
+    </div>
+  </div>`;
+  try{
+    const b64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=rej;r.readAsDataURL(file);});
+    pst(2);
+    const resp=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pdfBase64:b64,materiaName:mat.n})});
+    if(!resp.ok){const e=await resp.json();throw new Error(e.error||'Error del servidor');}
+    const p=await resp.json();
+    pst(3);
+    const vids=p.videos.map(v=>({tt:v.tt,ch:v.ch,du:v.du,id:v.idioma,u:`https://www.youtube.com/results?search_query=${encodeURIComponent(v.q)}`,ti:v.ti,lv:v.lv,em:v.em,th:null,q:v.q}));
+    pst(4);
+    if(DB.yk)await enrichYT(vids);
+    const sid='s'+Date.now();
+    const sn=Object.values(DB.s).filter(s=>s.mi===mid).length+1;
+    DB.s[sid]={id:sid,mi:mid,n:sn,t:p.semana+': '+p.titulo,d:p.descripcion,temas:p.temas,v:vids,f:new Date().toLocaleDateString('es-EC')};
+    sDB();
+    ST.sem=sid;if(!ST.open.includes(mid))ST.open.push(mid);
+    rSB();rM();
+  }catch(e){
+    showUP(mid);showAZ('Error: '+e.message);
+  }
+}
+function pst(n){for(let i=1;i<=4;i++){const e=document.getElementById('ps'+i);if(e)e.className='ps'+(i<n?' done':i===n?' cur':'');}}
+
+async function enrichYT(vids){
+  await Promise.all(vids.map(async v=>{
+    try{
+      const r=await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(v.q)}&type=video&maxResults=1&key=${DB.yk}`);
+      const d=await r.json();
+      if(d.items&&d.items[0]){const it=d.items[0];v.u=`https://www.youtube.com/watch?v=${it.id.videoId}`;v.th=it.snippet.thumbnails.medium.url;v.ch=it.snippet.channelTitle;v.tt=it.snippet.title;}
+    }catch(e){}
+  }));
+}
+
+function showMM(){
+  NMC=PAL[Object.keys(DB.m).length%PAL.length];
+  document.getElementById('mods').innerHTML=`<div class="mback" onclick="if(event.target===this)cM()"><div class="mod">
+    <h2>Nueva materia</h2><p class="mod-su">Agrega una asignatura de tu carrera</p>
+    <div id="ma"></div>
+    <label class="ml">Nombre *</label><input class="mi" id="mno" type="text" placeholder="Ej: Estadística Descriptiva" autofocus>
+    <label class="ml">Código (opcional)</label><input class="mi" id="mco" type="text" placeholder="Ej: EST-101">
+    <label class="ml">Color</label>
+    <div class="cp">${PAL.map(c=>`<div class="co${c===NMC?' sel':''}" style="background:${c}" onclick="selC('${c}',this)"></div>`).join('')}</div>
+    <div class="mbtns"><button class="btn btn-s" onclick="cM()">Cancelar</button><button class="btn btn-p" onclick="crM()">Crear materia</button></div>
+  </div></div>`;
+}
+function selC(c,el){NMC=c;document.querySelectorAll('.co').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');}
+function crM(){
+  const n=document.getElementById('mno').value.trim();
+  if(!n){document.getElementById('ma').innerHTML='<div class="alert">El nombre es requerido</div>';return;}
+  const id='m'+Date.now();
+  DB.m[id]={id,n,cod:document.getElementById('mco').value.trim(),c:NMC};
+  sDB();cM();rSB();showUP(id);
+}
+
+function rMgr(){
+  document.getElementById('tbt').textContent='Mis materias';
+  document.getElementById('tbs').textContent=Object.keys(DB.m).length+' materias';
+  const mats=Object.values(DB.m).sort((a,b)=>a.n.localeCompare(b.n));
+  document.getElementById('mc').innerHTML=`<div class="fu">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:18px"><button class="btn btn-p" onclick="showMM()">＋ Nueva materia</button></div>
+    ${mats.length?`<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px">${mats.map(m=>{
+      const sems=Object.values(DB.s).filter(s=>s.mi===m.id);
+      return`<div style="background:var(--s);border:1px solid var(--b);border-radius:var(--rl);padding:18px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+          <div style="width:10px;height:10px;border-radius:50%;background:${m.c};flex-shrink:0"></div>
+          <div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.n}</div>${m.cod?`<div style="font-size:11px;color:var(--t3)">${m.cod}</div>`:''}</div>
+        </div>
+        <div style="font-size:12px;color:var(--t2);margin-bottom:12px">${sems.length} semana${sems.length!==1?'s':''} · ${sems.reduce((a,s)=>a+(s.v?.length||0),0)} videos</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-s" style="flex:1;font-size:12px;padding:6px" onclick="showUP('${m.id}')">＋ Semana</button>
+          <button class="btn-ic" onclick="delM('${m.id}')">🗑</button>
+        </div>
+      </div>`;}).join('')}</div>`
+    :`<div class="empty"><div class="empty-ic">📚</div><h2>Sin materias</h2><p>Crea tu primera materia</p><button class="btn btn-p" onclick="showMM()">Crear materia</button></div>`}
+  </div>`;
+}
+function delM(id){if(!confirm('¿Eliminar esta materia y todas sus semanas?'))return;Object.values(DB.s).filter(s=>s.mi===id).forEach(s=>delete DB.s[s.id]);delete DB.m[id];if(ST.sem&&DB.s[ST.sem]?.mi===id)ST.sem=null;sDB();rSB();rMgr();}
+function cM(){document.getElementById('mods').innerHTML='';}
+
+lDB();
+</script>
+</body>
+</html>
