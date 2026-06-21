@@ -323,7 +323,7 @@ function rM(){
         <div class="vt">${v.th?`<img src="${v.th}" alt="" onerror="this.style.display='none'">`:''}<span style="position:relative;z-index:1">${v.em||'🎬'}</span><div class="vov"><div class="vpb"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div></div>
         <div class="vb">
           <div class="vti">${v.tt}</div>
-          <div class="vm"><span class="pi ${v.id==='es'?'pi-es':'pi-en'}">${v.id==='es'?'🇪🇸 ES':'🇬🇧 EN'}</span><span class="pi pi-lv">${v.lv||''}</span></div>
+          <div class="vm"><span class="pi ${v.id==='es'?'pi-es':'pi-en'}">${v.id==='es'?'🇪🇸 ES':'🇬🇧 EN'}</span><span class="pi pi-lv">${v.lv||''}</span>${v.fb?`<span class="pi" style="background:#fef3c7;color:#92400e">⚡ otro canal</span>`:''}</div>
           <div class="vch">${v.ch||''} · ${v.du||''}</div>
         </div>
       </a>`).join('')}</div>`
@@ -379,7 +379,7 @@ async function procPDF(file,mid){
     pst(3);
     const vids=p.videos.map(v=>({tt:v.tt,ch:v.ch,du:v.du,id:v.idioma,u:`https://www.youtube.com/results?search_query=${encodeURIComponent(v.q)}`,ti:v.ti,lv:v.lv,em:v.em,th:null,q:v.q}));
     pst(4);
-    if(DB.yk)await enrichYT(vids);
+    if(DB.yk)await enrichYT(vids,mat.ch);
     const sid='s'+Date.now();
     const sn=Object.values(DB.s).filter(s=>s.mi===mid).length+1;
     DB.s[sid]={id:sid,mi:mid,n:sn,t:p.semana+': '+p.titulo,d:p.descripcion,temas:p.temas,v:vids,f:new Date().toLocaleDateString('es-EC')};
@@ -392,12 +392,26 @@ async function procPDF(file,mid){
 }
 function pst(n){for(let i=1;i<=4;i++){const e=document.getElementById('ps'+i);if(e)e.className='ps'+(i<n?' done':i===n?' cur':'');}}
 
-async function enrichYT(vids){
+async function enrichYT(vids,channelId){
   await Promise.all(vids.map(async v=>{
     try{
-      const r=await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(v.q)}&type=video&maxResults=1&key=${DB.yk}`);
-      const d=await r.json();
-      if(d.items&&d.items[0]){const it=d.items[0];v.u=`https://www.youtube.com/watch?v=${it.id.videoId}`;v.th=it.snippet.thumbnails.medium.url;v.ch=it.snippet.channelTitle;v.tt=it.snippet.title;}
+      if(channelId){
+        const urlCh=`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(v.q)}&type=video&maxResults=1&channelId=${encodeURIComponent(channelId)}&key=${DB.yk}`;
+        const rCh=await fetch(urlCh);
+        const dCh=await rCh.json();
+        if(dCh.items&&dCh.items[0]){
+          const it=dCh.items[0];
+          v.u=`https://www.youtube.com/watch?v=${it.id.videoId}`;v.th=it.snippet.thumbnails.medium.url;v.ch=it.snippet.channelTitle;v.tt=it.snippet.title;v.fb=false;
+          return;
+        }
+      }
+      const urlAll=`https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(v.q)}&type=video&maxResults=1&key=${DB.yk}`;
+      const rAll=await fetch(urlAll);
+      const dAll=await rAll.json();
+      if(dAll.items&&dAll.items[0]){
+        const it=dAll.items[0];
+        v.u=`https://www.youtube.com/watch?v=${it.id.videoId}`;v.th=it.snippet.thumbnails.medium.url;v.ch=it.snippet.channelTitle;v.tt=it.snippet.title;v.fb=!!channelId;
+      }
     }catch(e){}
   }));
 }
@@ -409,6 +423,8 @@ function showMM(){
     <div id="ma"></div>
     <label class="ml">Nombre *</label><input class="mi" id="mno" type="text" placeholder="Ej: Estadística Descriptiva" autofocus>
     <label class="ml">Código (opcional)</label><input class="mi" id="mco" type="text" placeholder="Ej: EST-101">
+    <label class="ml">Canal de YouTube (opcional)</label><input class="mi" id="mch" type="text" placeholder="Ej: UCanMxWvOoiwtjLYm08Bo8QQ">
+    <div style="font-size:11px;color:var(--t3);margin-top:4px;line-height:1.5">Si lo dejas vacío, se busca en todo YouTube. Si pones el ID de un canal, los videos de esta materia saldrán solo de ese canal.</div>
     <label class="ml">Color</label>
     <div class="cp">${PAL.map(c=>`<div class="co${c===NMC?' sel':''}" style="background:${c}" onclick="selC('${c}',this)"></div>`).join('')}</div>
     <div class="mbtns"><button class="btn btn-s" onclick="cM()">Cancelar</button><button class="btn btn-p" onclick="crM()">Crear materia</button></div>
@@ -419,7 +435,7 @@ function crM(){
   const n=document.getElementById('mno').value.trim();
   if(!n){document.getElementById('ma').innerHTML='<div class="alert">El nombre es requerido</div>';return;}
   const id='m'+Date.now();
-  DB.m[id]={id,n,cod:document.getElementById('mco').value.trim(),c:NMC};
+  DB.m[id]={id,n,cod:document.getElementById('mco').value.trim(),ch:document.getElementById('mch').value.trim(),c:NMC};
   sDB();cM();rSB();showUP(id);
 }
 
@@ -437,6 +453,7 @@ function rMgr(){
           <div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.n}</div>${m.cod?`<div style="font-size:11px;color:var(--t3)">${m.cod}</div>`:''}</div>
         </div>
         <div style="font-size:12px;color:var(--t2);margin-bottom:12px">${sems.length} semana${sems.length!==1?'s':''} · ${sems.reduce((a,s)=>a+(s.v?.length||0),0)} videos</div>
+        ${m.ch?`<div style="font-size:11px;color:var(--ac);margin-bottom:12px">📺 Canal fijo configurado</div>`:''}
         <div style="display:flex;gap:8px">
           <button class="btn btn-s" style="flex:1;font-size:12px;padding:6px" onclick="showUP('${m.id}')">＋ Semana</button>
           <button class="btn-ic" onclick="delM('${m.id}')">🗑</button>
